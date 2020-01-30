@@ -19,19 +19,31 @@ describe('users model', function() {
             await Users.add({username:'Test2', password:'Not null'});
             await Users.add({username:'Test3', password:'Not null'});
 
-            const users = await db('Users');
+            const users = await db('users');
             
             expect(users).toHaveLength(3);
         })
     
     })
 
-    describe.skip('delete', function() {
-        it('removes', async function() {
+    describe('remove()', function() {
+        beforeEach(async () => {
+            await db('users').truncate();
+        })
+        it('removes user by id', async function() {
             // check table empty
-            // add
-            // delete
-            // check table again
+            await Users.find()
+            const usersEmpty = await db('users')
+            expect(usersEmpty).toHaveLength(0);
+
+            await Users.add({username:'Test1', password:'Not null'});
+            await Users.add({username:'Test2', password:'Not null'});
+            const usersAdded = await db('users')
+            expect(usersAdded).toHaveLength(2);
+
+            await Users.remove(1)
+            const users = await db('users');
+            expect(users).toHaveLength(1);
         })
     })
 })
