@@ -32,7 +32,6 @@ describe('users model', function() {
         })
         it('removes user by id', async function() {
             // check table empty
-            await Users.find()
             const usersEmpty = await db('users')
             expect(usersEmpty).toHaveLength(0);
 
@@ -45,5 +44,24 @@ describe('users model', function() {
             const users = await db('users');
             expect(users).toHaveLength(1);
         })
+    })
+
+    describe('findById()', function() {
+        beforeEach(async () => {
+            await db('users').truncate();
+        })
+        it('finds user by id', async function(){
+            await Users.add({username:'Test1', password:'Not null'});
+            await Users.add({username:'Test2', password:'Not null'});
+            await Users.add({username:'Test3', password:'Not null'});
+
+            const users = await db('users');
+            
+            expect(users).toHaveLength(3);
+
+            const user = await Users.findById(3)
+            expect(user).toEqual({ id: 3, password: "Not null", type: null, username: "Test3"});
+        })
+    
     })
 })
