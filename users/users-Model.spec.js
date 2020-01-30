@@ -64,4 +64,23 @@ describe('users model', function() {
         })
     
     })
+    describe('findBy(filter)', function() {
+        beforeEach(async () => {
+            await db('users').truncate();
+        })
+        it('finds user by id', async function(){
+            await Users.add({username:'Test1', password:'Not null', type: 'admin'});
+            await Users.add({username:'Test2', password:'Not null', type: 'admin'});
+            await Users.add({username:'Test3', password:'Not null', type: 'user'});
+
+            const users = await db('users');
+            
+            expect(users).toHaveLength(3);
+
+            const result = await Users.findBy("admin");
+            expect(result).toHaveLength(2);
+            expect(result).toEqual([{"id": 1, "password": "Not null", "type": "admin", "username": "Test1"}, {"id": 2, "password": "Not null", "type": "admin", "username": "Test2"}]);
+        })
+    
+    })
 })
