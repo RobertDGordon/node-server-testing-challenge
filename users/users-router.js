@@ -4,12 +4,14 @@ const Users = require('./users-model.js');
 const authorization = require('../middleware/authorization.js');
 const checkType = require('../middleware/usertype.js');
 
-router.get('/', authorization, checkType('admin'), (req, res) => {
+router.get('/', (req, res) => {
   Users.find()
     .then(users => {
-      res.json(users);
+      res.status(200).json(users);
     })
-    .catch(err => res.send(err));
+    .catch(err => {
+      res.status(500).json(err)
+    });
 });
 
 router.get('/list', authorization, checkType('admin'), (req, res) => {
