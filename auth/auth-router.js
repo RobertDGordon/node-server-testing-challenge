@@ -5,6 +5,10 @@ const Users = require('../users/users-model.js');
 
 const { jwtSecret } = require('../config/secret.js');
 
+router.get('/', (req, res) =>{
+  res.send("This is the auth route");
+})
+
 router.post('/register', (req, res) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
